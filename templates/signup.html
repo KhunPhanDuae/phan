@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="auth-container">
+        <h1>အကောင့်ဖွင့်ပါ</h1>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flashes">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        <form method="POST">
+            <input type="text" name="username" placeholder="အသုံးပြုသူအမည်" required>
+            <input type="password" name="password" placeholder="စကားဝှက်" required>
+            <button type="submit">အကောင့်ဖွင့်မည်</button>
+        </form>
+        <p>အကောင့်ရှိနှင့်ပြီးသားလား? <a href="{{ url_for('login') }}">Login ဝင်ပါ</a></p>
+    </div>
+</body>
+</html>

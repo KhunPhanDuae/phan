@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ room.name }} Chat Room</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="chat-container">
+        <h1>{{ room.name }} Chat</h1>
+        <div id="messages" class="messages">
+            {% for msg in messages %}
+                <p><strong>{{ msg.user.username }}:</strong> {{ msg.content }} <small>({{ msg.timestamp.strftime('%Y-%m-%d %H:%M:%S') }})</small></p>
+            {% endfor %}
+        </div>
+        <input type="text" id="messageInput" placeholder="စာရိုက်ပါ..." required>
+        <button id="sendMessageButton">ပို့မည်</button>
+        <p><a href="{{ url_for('index') }}">Rooms အားလုံးသို့ ပြန်သွားမည်</a></p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', () => {
+            const socket = io();
+            const roomId = {{ room.id }}; // Jinja2 ကနေ room ID ကို ယူပါ
+
+            const messagesDiv = document.getElementById('messages');
+            const messageInput = document.getElementById('messageInput');
+            const sendMessageButton = document.getElementById('sendMessageButton');
+
+            // Room ထဲဝင်ဖို့ server ကို အကြောင်းကြားပါ
+            socket.emit('join', { room_id: roomId });
+
+            // Function to add a message to the display
+            function addMessage(msg) {
+                const messageElement = document.createElement('p');
+                messageElement.innerHTML = `<strong>${msg.username}:</strong> ${msg.message} <small>(${msg.timestamp})</small>`;
+                messagesDiv.appendChild(messageElement);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight; // Auto-scroll to the bottom
+            }
+
+            // Status message (e.g., user joined/left) received
+            socket.on('status_message', (data) => {
+                if (data.room_id === roomId) {
+                    const statusElement = document.createElement('p');
+                    statusElement.classList.add('status-msg');
+                    statusElement.textContent = data.msg;
+                    messagesDiv.appendChild(statusElement);
+                    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                }
+            });
+
+            // Event listener for receiving messages from the server
+            socket.on('receive_message', (data) => {
+                if (data.room_id === roomId) { // လက်ရှိ room အတွက် မက်ဆေ့ချ်မှသာ ပြသပါ
+                    addMessage(data);
+                }
+            });
+
+            // Event listener for sending messages
+            sendMessageButton.addEventListener('click', () => {
+                sendMessage();
+            });
+
+            messageInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+
+            function sendMessage() {
+                const message = messageInput.value.trim();
+                if (message) {
+                    socket.emit('send_message', { room_id: roomId, message: message });
+                    messageInput.value = ''; // Clear the input field
+                } else {
+                    alert('Please enter a message.');
+                }
+            }
+
+            // Clean up when leaving the page/room
+            window.addEventListener('beforeunload', () => {
+                socket.emit('leave', { room_id: roomId });
+            });
+        });
+    </script>
+</body>
+</html>
