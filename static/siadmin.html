@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="blk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ခွုမ်ပဲင်ႏဖြာꩻ လိတ်မဲ့ငါ</title>
+<link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-storage-compat.js"></script>
+</head>
+<body>
+    <div class="admin-container">
+        <div id="auth-section" class="auth-container">
+            <div id="admin-login-view" class="auth-card">
+                <h2>ခွုမ်ပဲင်ႏဖြာꩻ နွို့ငါ</h2>
+                <input type="email" id="adminEmailInput" placeholder="အီးမေး">
+                <input type="password" id="adminPasswordInput" placeholder="ငဝ်းပလို့ꩻ">
+                <button id="adminLoginButton">နွို့ငါ</button>
+                <p id="admin-login-error" class="error-message"></p>
+            </div>
+        </div>
+
+        <div id="admin-app-section" class="hidden">
+            <div class="admin-header">
+                <h2>ခွုမ်ပဲင်ႏဖြာꩻ လိတ်မဲ့ငါ - ဖန်းဖြယ်ခွင်ꩻလꩻ ခင်ႏလမ်းသွူ</h2>
+                <button id="adminLogoutButton">ခွုမ်ပဲင်ႏဖြာꩻ ထန်ႏထိုꩻ သွုံꩻဖြာꩻ</button>
+            </div>
+
+            <div class="search-container">
+                <label for="userSearchInput">ထိုမ်ႏထွားကေားသွုံꩻသား:</label>
+                <input type="text" id="userSearchInput" placeholder="ထိုမ်ႏထွား အီးမေး တွမ်ႏ မဉ်ꩻ ">
+            </div>
+
+            <div class="admin-status" id="adminStatusMessage"></div>
+            <div class="table-responsive">
+                <table class="user-table">
+                    <thead>
+                        <tr>
+                            <th>အီးမေး</th>
+                            <th>အမဉ်ꩻ</th>
+                            <th>သက်</th>
+                            <th>စွိုးခွီ</th>
+                            <th>ခမ်းထီ</th>
+                            <th>ခမ်းနယ်ႏ</th>
+                            <th>ဝေင်ꩻ</th>
+                            <th>နွို့လွဉ် မွူးနီꩻ</th>
+                            <th>အဝ်ႏ</th>
+                            <th>UID</th>
+                            <th>ထာꩻခွုမ်မာꩻ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTableBody">
+                        </tbody>
+                </table>
+            </div>
+            </div>
+    </div>
+
+    <div id="editUserModal" class="modal hidden">
+        <div class="modal-content">
+            <h3>ကေားသွုံꩻ ထာꩻမွဉ်းဖျင်</h3>
+            <p id="editUserError" class="error-message"></p>
+            <label for="editDisplayName">အမဉ်ꩻ:</label>
+            <input type="text" id="editDisplayName">
+
+            <label for="editEmail">အီးမေး:</label>
+            <input type="email" id="editEmail" readonly> 
+            
+            <label for="editGender">စွိုးခွီ:</label>
+            <select id="editGender">
+                <option value="">လွိုက်</option>
+                <option value="Male">လိုꩻခို</option>
+                <option value="Female">လိုꩻမူႏ</option>
+                <option value="Other">အလင်ꩻ</option>
+            </select>
+
+            <label for="editAge">သက်:</label>
+            <input type="number" id="editAge" min="1" max="120">
+
+            <label for="editCountry">ခမ်းထီ:</label>
+            <input type="text" id="editCountry">
+
+            <label for="editState">ခမ်းနယ်ႏ:</label>
+            <input type="text" id="editState">
+
+            <label for="editCity">ဝေင်ꩻ:</label>
+            <input type="text" id="editCity">
+
+            <label for="editBio">ဖဝ:</label>
+            <textarea id="editBio" maxlength="200" style="width: calc(100% - 24px); min-height: 80px;"></textarea>
+
+            <label for="editSignupDate">နွို့လွဉ် မွူးနီꩻ:</label> 
+            <input type="text" id="editSignupDate" readonly>
+
+            <div class="modal-buttons">
+                <button id="saveUserChanges">သိမ်ꩻထူႏ ထာꩻပြောင်ꩻလုဲင်ႏ</button>
+                <button id="closeEditModal">ပေ့ꩻထိုꩻ</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Your Firebase config (REPLACE WITH YOUR ACTUAL CONFIG)
+        const firebaseConfig = {
+            apiKey: "AIzaSyCktuiXt0CYAtXWxOOOer-yl7cy23QkINc",
+            authDomain: "chattt-93cc6.firebaseapp.com",
+            databaseURL: "https://chattt-93cc6-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "chattt-93cc6",
+            storageBucket: "chattt-93cc6.firebasestorage.app",
+            messagingSenderId: "805645097641",
+            appId: "1:805645097641:web:0c8a11315f331f6363e7b8"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Get Firebase services
+        const auth = firebase.auth();
+        const database = firebase.database();
+        const usersRef = database.ref('users');
+    </script>
+    <script src="admin-script.js"></script>
+</body>
+</html>

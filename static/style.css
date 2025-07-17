@@ -1,0 +1,482 @@
+
+    .modal-content {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    width: 95%;
+    max-width: 550px;
+    text-align: left;
+    animation: fadeInScale 0.3s ease-out forwards;
+    /* --- အောက်ပါကုဒ်အသစ်များကို ထည့်သွင်းပါ --- */
+    max-height: 90vh; /* Viewport Height ရဲ့ 90% ထက် မပိုစေရ */
+    overflow-y: auto; /* ဒေါင်လိုက် scrollbar ကို လိုအပ်မှသာ ပြသပါ */
+    /* --- အသစ်ထည့်သွင်းမှု ပြီးဆုံး --- */
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    width: 95%;
+    max-width: 550px;
+    text-align: left;
+    animation: fadeInScale 0.3s ease-out forwards;
+    /* အသစ်ထည့်ရန် */
+    max-height: 80vh; /* Viewport ရဲ့ ၈၀% အမြင့်ကို သတ်မှတ်ခြင်း */
+    overflow-y: auto; /* Scroll bar ကို လိုအပ်မှသာ ပေါ်စေခြင်း */
+}
+
+        /* General Styles & Reset */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #eef2f6; /* Lighter, modern background */
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh; /* Full viewport height */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align to top for longer content */
+            padding: 20px;  
+
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/c/cd/Success_Improve_RYPAK.svg');
+    background-size: cover; /* မျက်နှာပြင်အပြည့် ဖုံးအုပ်ဖို့ */
+    background-position: center; /* ပုံကို အလယ်မှာထားဖို့ */
+    background-repeat: no-repeat; /* ပုံ ထပ်မနေစေဖို့ */
+    background-attachment: fixed; /* scroll လုပ်ရင်တောင် ပုံကို မရွှေ့ဖို့ */
+    /* အောက်ပါ အသစ်ကုဒ်များကို ထပ်ထည့်ပါ */
+    height: auto; /* Viewport ရဲ့ အမြင့်အပြည့် ယူဖို့ */
+    width: 160vw; /* Viewport ရဲ့ အနံအပြည့် ယူဖို့ */
+
+   }
+
+        .content {
+            padding: 50px;
+            background-color: rgba(0, 0, 0, 0.5); /* စာသားတွေ ပိုမိုထင်ရှားစေရန် အလွှာထပ်ခြင်း */
+        }
+        .admin-container {
+            width: 100%;
+            max-width: 1200px; /* Wider container for better data display */
+            margin: 20px auto;
+            background-color: rgba(255, 255, 255, 0.8); 
+            border-radius: 12px; /* Softer corners */
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1); /* More pronounced shadow */
+            padding: 40px; /* Increased padding */
+        }
+
+        /* Admin Header */
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e0e6ed; /* Slightly thicker border */
+        }
+
+        .admin-header h2 {
+            font-size: 2.5em; /* Larger heading */
+            color: #2c3e50; /* Darker, more professional blue-grey */
+            font-weight: 700; /* Bolder font */
+            margin: 0;
+        }
+
+        .admin-header button {
+            background-color: #e74c3c; /* A bit brighter red for logout */
+            color: white;
+            border: none;
+            padding: 12px 25px; /* Larger button */
+            border-radius: 8px; /* Softer corners */
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .admin-header button:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px); /* Slight lift effect */
+        }
+
+        /* Search Container */
+        .search-container {
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px; /* More space between elements */
+            background-color: #f8f9fa; /* Light background for search bar */
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 1px solid #dee2e6;
+        }
+        .search-container label {
+            font-weight: 600;
+            color: #555;
+            flex-shrink: 0; /* Prevent label from shrinking */
+        }
+
+        .search-container input {
+            flex-grow: 1;
+            padding: 12px 18px;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            font-size: 1em;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08);
+            max-width: 400px; /* Max width for search input */
+            outline: none; /* Remove default outline */
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .search-container input:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+        }
+
+        /* Table Responsive Container */
+        .table-responsive {
+            max-height: 500px; /* Fixed height for vertical scroll */
+            overflow-y: auto; /* Enable vertical scroll */
+            overflow-x: auto; /* Enable horizontal scroll */
+            margin-top: 25px;
+            border: 1px solid #e0e6ed; /* Overall table border */
+            border-radius: 10px; /* Rounded corners for the container */
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05); /* Subtle shadow for the scrollable area */
+            background-color: #ffffff; /* Ensure background is white */
+        }
+
+        /* User Table */
+        .user-table {
+            width: 100%; /* Ensure table takes full width of its container */
+            border-collapse: separate; /* Allows for border-radius on cells */
+            border-spacing: 0; /* No space between cells */
+            /* margin-top: 25px; Moved to .table-responsive */
+            /* border: 1px solid #e0e6ed; Moved to .table-responsive */
+            /* border-radius: 10px; Moved to .table-responsive */
+            /* overflow: hidden; Removed from table, handled by .table-responsive */
+        }
+
+        .user-table th, .user-table td {
+            padding: 15px 20px; /* Increased padding */
+            text-align: left;
+            font-size: 0.98em; /* Slightly larger font */
+            border-bottom: 1px solid #e0e6ed; /* Cell borders */
+            /* Ensure fixed width for some columns if needed for horizontal scroll */
+            white-space: nowrap; /* Prevent text wrapping in cells */
+        }
+
+        .user-table th {
+            background-color: #f2f7fc; /* Lighter header background */
+            font-weight: 700; /* Bolder header text */
+            color: #4a69bd; /* Accent color for headers */
+            text-transform: uppercase; /* Uppercase headers */
+            letter-spacing: 0.5px;
+            position: sticky; /* Make headers sticky for vertical scroll */
+            top: 0; /* Stick to the top */
+            z-index: 10; /* Ensure headers are above content when scrolling */
+            box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1); /* Subtle shadow for sticky header */
+        }
+        /* Remove bottom border from last header row cells */
+        .user-table thead tr:last-child th {
+            border-bottom: none;
+        }
+
+        .user-table tbody tr:nth-child(even) {
+            background-color: #fdfefe; /* Very light subtle stripe */
+        }
+
+        .user-table tbody tr:hover {
+            background-color: #e8f5ff; /* More noticeable hover */
+            cursor: pointer;
+        }
+
+        /* Action Buttons in Table */
+        .user-table button {
+            background-color: #3498db; /* Consistent blue for edit */
+            color: white;
+            border: none;
+            padding: 9px 15px;
+            border-radius: 6px; /* Softer button corners */
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-right: 8px; /* Space between buttons */
+            font-weight: 500;
+        }
+        .user-table button.delete-btn {
+            background-color: #e74c3c; /* Consistent red for delete */
+        }
+        .user-table button:hover {
+            background-color: #2188c9;
+            transform: translateY(-1px);
+        }
+        .user-table button.delete-btn:hover {
+            background-color: #c0392b;
+        }
+
+        /* Admin Status Message */
+        .admin-status {
+            margin-top: 25px;
+            padding: 18px; /* Larger padding */
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            display: none; /* Hidden by default */
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+        .admin-status[style*="background-color: #d4edda"] { /* Success */
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .admin-status[style*="background-color: #f8d7da"] { /* Error */
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+
+        .error-message {
+            color: #e74c3c; /* Stronger red for error messages */
+            margin-top: 15px;
+            font-size: 0.95em;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* Admin Login View */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh; /* Centered in viewport */
+        }
+        .auth-card {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        .auth-card h2 {
+            font-size: 2.2em;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+        .auth-card input {
+            width: calc(100% - 24px); /* Account for padding */
+            padding: 15px 12px;
+            margin-bottom: 18px;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            outline: none;
+        }
+        .auth-card input:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.25);
+        }
+        .auth-card button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            width: 100%;
+        }
+        .auth-card button:hover {
+            background-color: #2188c9;
+            transform: translateY(-2px);
+        }
+
+        /* Modal (Edit User) */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); /* Darker overlay */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .modal:not(.hidden) { /* Show animation when not hidden */
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4); /* More prominent shadow */
+            width: 95%;
+            max-width: 550px; /* Slightly larger modal */
+            text-align: left;
+            animation: fadeInScale 0.3s ease-out forwards; /* New animation */
+        }
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: translateY(-30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .modal-content h3 {
+            font-size: 2em;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .modal-content label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600; /* Bolder labels */
+            color: #555;
+            font-size: 0.95em;
+        }
+        .modal-content input,
+        .modal-content select,
+        .modal-content textarea {
+            width: 100%; /* Full width */
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            font-size: 1em;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .modal-content input:focus,
+        .modal-content select:focus,
+        .modal-content textarea:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.25);
+        }
+        .modal-content textarea {
+            min-height: 100px; /* Taller textarea */
+            resize: vertical; /* Allow vertical resizing */
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px; /* More space between buttons */
+            margin-top: 30px;
+        }
+        .modal-buttons button {
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.05em;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .modal-buttons button#saveUserChanges {
+            background-color: #2ecc71; /* Green for save */
+            color: white;
+        }
+        .modal-buttons button#saveUserChanges:hover {
+            background-color: #27ae60;
+            transform: translateY(-2px);
+        }
+        .modal-buttons button#closeEditModal {
+            background-color: #95a5a6; /* Grey for close */
+            color: white;
+        }
+        .modal-buttons button#closeEditModal:hover {
+            background-color: #7f8c8d;
+            transform: translateY(-2px);
+        }
+
+        /* Utility Class */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .admin-container {
+                padding: 20px;
+                margin: 10px auto;
+            }
+            .admin-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            .admin-header h2 {
+                font-size: 1.8em;
+            }
+            .admin-header button {
+                width: 100%;
+                text-align: center;
+            }
+            .search-container {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 10px;
+            }
+            .search-container input {
+                max-width: 100%;
+            }
+            .table-responsive {
+                max-height: 400px; /* Adjust height for smaller screens */
+            }
+            .user-table th, .user-table td {
+                padding: 10px 12px;
+                font-size: 0.9em;
+            }
+            .user-table button {
+                padding: 6px 10px;
+                font-size: 0.8em;
+            }
+            .modal-content {
+                padding: 25px;
+            }
+            .modal-content h3 {
+                font-size: 1.5em;
+            }
+            .modal-buttons {
+                flex-direction: column;
+            }
+            .modal-buttons button {
+                width: 100%;
+            }
+        }
+        @media (max-width: 480px) {
+            .auth-card {
+                padding: 25px;
+            }
+            .auth-card h2 {
+                font-size: 1.6em;
+            }
+            .auth-card input, .auth-card button {
+                font-size: 0.95em;
+                padding: 12px;
+            }
+        }
