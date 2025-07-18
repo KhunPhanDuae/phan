@@ -14,14 +14,15 @@ const loginError = document.getElementById('login-error');
 
 const signupEmailInput = document.getElementById('signupEmailInput');
 const signupPasswordInput = document.getElementById('signupPasswordInput');
-const signupUsernameInput = document.getElementById('signupUsernameInput'); // New
-const signupGenderSelect = document.getElementById('signupGenderSelect'); // New
-const signupAgeInput = document.getElementById('signupAgeInput'); // New
-const signupBornInput = document.getElementById('signupBornInput'); // New
-const signupCountryInput = document.getElementById('signupCountryInput'); // New
-const signupEthnicityInput = document.getElementById('signupEthnicityInput'); // New
-const signupStateInput = document.getElementById('signupStateInput'); // New
-const signupCityInput = document.getElementById('signupCityInput'); // New
+const signupUsernameInput = document.getElementById('signupUsernameInput');
+const signupGenderSelect = document.getElementById('signupGenderSelect');
+const signupAgeInput = document.getElementById('signupAgeInput');
+const signupBornInput = document.getElementById('signupBornInput');
+const signupCountryInput = document.getElementById('signupCountryInput');
+const signupEthnicityInput = document.getElementById('signupEthnicityInput');
+const signupStateInput = document.getElementById('signupStateInput');
+const signupCityInput = document.getElementById('signupCityInput');
+const signupDateInput = document.getElementById('signupDateInput'); // NEW: Signup Date Input
 const signupButton = document.getElementById('signupButton');
 const signupError = document.getElementById('signup-error');
 
@@ -55,12 +56,13 @@ const displayNameInput = document.getElementById('displayNameInput');
 const bioInput = document.getElementById('bioInput');
 const hobbiesInput = document.getElementById('hobbiesInput');
 const genderSelect = document.getElementById('genderSelect');
-const ageInput = document.getElementById('ageInput'); // New
-const bornInput = document.getElementById('bornInput'); // New
-const countryInput = document.getElementById('countryInput'); // New
-const ethnicityInput = document.getElementById('ethnicityInput'); // New
-const stateInput = document.getElementById('stateInput'); // New
-const cityInput = document.getElementById('cityInput'); // New
+const ageInput = document.getElementById('ageInput');
+const bornInput = document.getElementById('bornInput');
+const countryInput = document.getElementById('countryInput');
+const ethnicityInput = document.getElementById('ethnicityInput');
+const stateInput = document.getElementById('stateInput');
+const cityInput = document.getElementById('cityInput');
+const signupDateDisplay = document.getElementById('signupDateDisplay'); // NEW: Signup Date Display in Profile
 
 const saveProfileButton = document.getElementById('saveProfileButton');
 const closeProfileModal = document.getElementById('closeProfileModal');
@@ -91,6 +93,12 @@ showSignupButton.addEventListener('click', () => {
     loginView.classList.add('hidden');
     signupView.classList.remove('hidden');
     loginError.textContent = ''; // Clear previous errors
+    // Set signup date to today's date when opening signup form
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+    const dd = String(today.getDate()).padStart(2, '0');
+    signupDateInput.value = `${yyyy}-${mm}-${dd}`;
 });
 
 showLoginButton.addEventListener('click', () => {
@@ -111,6 +119,7 @@ signupButton.addEventListener('click', async () => {
     const ethnicity = signupEthnicityInput.value.trim();
     const state = signupStateInput.value.trim();
     const city = signupCityInput.value.trim();
+    const signupDate = signupDateInput.value; // NEW: Get signup date
 
     signupError.textContent = '';
 
@@ -141,7 +150,8 @@ signupButton.addEventListener('click', async () => {
             country: country,
             ethnicity: ethnicity,
             state: state,
-            city: city
+            city: city,
+            signupDate: signupDate // NEW: Save signup date
         });
         alert('ဒင်ႏသွင်ꩻမဉ်ꩻ ထွူလဲဉ်း! ယိုခါ နာꩻ နွို့ငါ နွောင်ꩻလဲဉ်းဩ။'); // Sign up successful! You can now log in.
         // Switch to login view after successful signup
@@ -229,12 +239,19 @@ auth.onAuthStateChanged(user => {
                 });
             } else {
                  // If for some reason user node doesn't exist (e.g., directly logged in from old data), create it with basic data
+                const today = new Date();
+                const yyyy = today.getFullYear();
+                const mm = String(today.getMonth() + 1).padStart(2, '0');
+                const dd = String(today.getDate()).padStart(2, '0');
+                const signupDate = `${yyyy}-${mm}-${dd}`;
+
                 usersRef.child(currentUserId).set({
                     email: user.email,
                     displayName: user.displayName || user.email.split('@')[0],
                     status: 'online',
                     bio: '', hobbies: '', gender: '', age: null, born: '',
-                    country: '', ethnicity: '', state: '', city: ''
+                    country: '', ethnicity: '', 'state': '', city: '',
+                    signupDate: signupDate // NEW: Save signup date if creating new user node
                 });
                 currentUserDisplayName = user.displayName || user.email.split('@')[0];
                 currentUserDisplay.textContent = `နွို့ငါသားမဉ်ꩻ: ${currentUserDisplayName}`;
@@ -277,6 +294,7 @@ auth.onAuthStateChanged(user => {
         signupEthnicityInput.value = '';
         signupStateInput.value = '';
         signupCityInput.value = '';
+        signupDateInput.value = ''; // NEW: Clear signup date input
         loginError.textContent = '';
         signupError.textContent = '';
 
@@ -323,12 +341,13 @@ function setProfileFieldsEditable(editable) {
     bioInput.readOnly = !editable;
     hobbiesInput.readOnly = !editable;
     genderSelect.disabled = !editable;
-    ageInput.readOnly = !editable; // New
-    bornInput.readOnly = !editable; // New
-    countryInput.readOnly = !editable; // New
-    ethnicityInput.readOnly = !editable; // New
-    stateInput.readOnly = !editable; // New
-    cityInput.readOnly = !editable; // New
+    ageInput.readOnly = !editable;
+    bornInput.readOnly = !editable;
+    countryInput.readOnly = !editable;
+    ethnicityInput.readOnly = !editable;
+    stateInput.readOnly = !editable;
+    cityInput.readOnly = !editable;
+    signupDateDisplay.readOnly = true; // NEW: Signup Date is always read-only
     // saveProfileButton.classList.toggle('hidden', !editable); // Managed by direct calls now
 }
 
@@ -343,12 +362,13 @@ async function loadUserProfile(uid) {
             bioInput.value = userData.bio || '';
             hobbiesInput.value = userData.hobbies || '';
             genderSelect.value = userData.gender || '';
-            ageInput.value = userData.age || ''; // New
-            bornInput.value = userData.born || ''; // New
-            countryInput.value = userData.country || ''; // New
-            ethnicityInput.value = userData.ethnicity || ''; // New
-            stateInput.value = userData.state || ''; // New
-            cityInput.value = userData.city || ''; // New
+            ageInput.value = userData.age || '';
+            bornInput.value = userData.born || '';
+            countryInput.value = userData.country || '';
+            ethnicityInput.value = userData.ethnicity || '';
+            stateInput.value = userData.state || '';
+            cityInput.value = userData.city || '';
+            signupDateDisplay.value = userData.signupDate || 'N/A'; // NEW: Display signup date
             profileError.textContent = '';
         } else {
             profileError.textContent = "မော့ꩻတဝ်း နမ်းအအဲဉ်ႏ လိတ်လာႏ.";
@@ -364,12 +384,12 @@ saveProfileButton.addEventListener('click', async () => {
     const newBio = bioInput.value.trim();
     const newHobbies = hobbiesInput.value.trim();
     const newGender = genderSelect.value;
-    const newAge = ageInput.value; // New
-    const newBorn = bornInput.value; // New
-    const newCountry = countryInput.value.trim(); // New
-    const newEthnicity = ethnicityInput.value.trim(); // New
-    const newState = stateInput.value.trim(); // New
-    const newCity = cityInput.value.trim(); // New
+    const newAge = ageInput.value;
+    const newBorn = bornInput.value;
+    const newCountry = countryInput.value.trim();
+    const newEthnicity = ethnicityInput.value.trim();
+    const newState = stateInput.value.trim();
+    const newCity = cityInput.value.trim();
 
     profileError.textContent = '';
 

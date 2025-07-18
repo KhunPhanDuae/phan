@@ -40,6 +40,7 @@
                 <input type="text" id="signupEthnicityInput" placeholder="လိုꩻမျိုꩻ (Ethnicity)">
                 <input type="text" id="signupStateInput" placeholder="ခမ်းနယ်ႏ (State)">
                 <input type="text" id="signupCityInput" placeholder="ဝေင်ꩻ (City)">
+                <input type="hidden" id="signupDateInput"> 
                 
                 <button id="signupButton">ဒင်ႏသွင်ꩻမဉ်ꩻ</button>
                 <p class="auth-toggle">ကေားသွုံꩻဖြာꩻ အဝ်ႏသား? <span id="showLogin">နွို့ငါ</span></p>
@@ -135,6 +136,9 @@
 
                     <label for="cityInput">ဝေင်ꩻ:</label>
                     <input type="text" id="cityInput" placeholder="ဝေင်ꩻ" maxlength="50">
+
+                    <label for="signupDateDisplay">နွို့လွဉ် မွူးနီꩻ:</label>
+                    <input type="text" id="signupDateDisplay" readonly>
                 </div>
                 
                 <p id="profile-error" class="error-message"></p>
@@ -160,14 +164,14 @@
     <script>
         // Your Firebase config (REPLACE WITH YOUR ACTUAL CONFIG)
         const firebaseConfig = {
-  apiKey: "AIzaSyCktuiXt0CYAtXWxOOOer-yl7cy23QkINc",
-  authDomain: "chattt-93cc6.firebaseapp.com",
-  databaseURL: "https://chattt-93cc6-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "chattt-93cc6",
-  storageBucket: "chattt-93cc6.firebasestorage.app",
-  messagingSenderId: "805645097641",
-  appId: "1:805645097641:web:0c8a11315f331f6363e7b8"
-};
+            apiKey: "AIzaSyCktuiXt0CYAtXWxOOOer-yl7cy23QkINc",
+            authDomain: "chattt-93cc6.firebaseapp.com",
+            databaseURL: "https://chattt-93cc6-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "chattt-93cc6",
+            storageBucket: "chattt-93cc6.firebasestorage.app",
+            messagingSenderId: "805645097641",
+            appId: "1:805645097641:web:0c8a11315f331f6363e7b8"
+        };
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
