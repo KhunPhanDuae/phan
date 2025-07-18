@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>အရန်းထို ဒေါ့ꩻရီဝင်ꩻတာႏ</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
@@ -14,7 +15,7 @@
     <div class="container">
         <div id="auth-section" class="auth-container">
             <div id="login-view" class="auth-card">
-                <h2>နွို့ငါ</h2>
+                <h2>နွို့ငါ သွုံꩻဖြာꩻ</h2>
                 <input type="email" id="loginEmailInput" placeholder="အီးမေး">
                 <input type="password" id="loginPasswordInput" placeholder="ငဝ်းပလို့ꩻ">
                 <button id="loginButton">နွို့ငါ</button>
@@ -50,13 +51,15 @@
 
         <div id="app-section" class="app-container hidden">
             <div class="header">
-                <span id="currentUserDisplay"></span>
-                <button id="profileButton">နမ်းအအဲဉ်ႏ</button>
-                <button id="logoutButton">ထန်ႏထိုꩻ သွုံꩻဖြာꩻ</button>
+                <div class="header-left">
+                    <button id="usersButton" class="header-icon-button material-icons">group</button>
+                    <span id="currentUserDisplay"></span>
+                </div>
+                <button id="settingsButton" class="header-icon-button material-icons">more_vert</button>
             </div>
 
             <div class="main-content">
-                <div class="user-list-panel">
+                <div id="user-list-panel" class="user-list-panel">
                     <h3>ဒေါ့ꩻရီဝင်ꩻ</h3>
                     <ul id="userList" class="user-list">
                         <li class="user-list-item" data-chat-type="public" id="publicChatOption">
@@ -87,12 +90,17 @@
                     <div class="input-area">
                         <input type="text" id="messageInput" placeholder="တဲမ်းသော့ꩻ နာꩻလိတ်ဟုဲင်း...">
                         <label for="imageUploadInput" class="image-upload-label">
-                            <span class="image-upload-icon">&#128247;</span> <input type="file" id="imageUploadInput" accept="image/*" class="hidden">
+                            <span class="image-upload-icon material-icons">image</span> <input type="file" id="imageUploadInput" accept="image/*" class="hidden">
                         </label>
                         <button id="sendButton" disabled>ပသာ</button>
                     </div>
                 </div>
             </div>
+        </div>
+        
+        <div id="settings-menu" class="settings-menu hidden">
+            <button id="profileButton">နမ်းအအဲဉ်ႏ</button>
+            <button id="logoutButton">ထန်ႏထိုꩻ သွုံꩻဖြာꩻ</button>
         </div>
 
         <div id="profile-modal" class="modal hidden">

@@ -15,12 +15,13 @@ body {
     border-radius: 12px;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
     width: 95%;
-    max-width: 1200px; /* Increased max-width for desktop */
-    height: 90vh; /* Slightly increased height */
+    max-width: 1200px;
+    height: 90vh;
     padding: 25px;
     display: flex;
     flex-direction: column;
-    overflow: hidden; /* Prevent content overflow */
+    overflow: hidden;
+    position: relative;
 }
 
 h1, h2, h3, h4 {
@@ -34,7 +35,7 @@ h1, h2, h3, h4 {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    flex-grow: 1; /* Occupy full height */
+    flex-grow: 1;
     padding: 20px;
 }
 
@@ -47,13 +48,12 @@ h1, h2, h3, h4 {
     flex-direction: column;
     align-items: center;
     width: 90%;
-    max-width: 400px; /* Adjusted max-width for auth forms */
+    max-width: 400px;
     animation: fadeIn 0.5s ease-out;
 
-    /* --- NEW: For Scrollable Signup Form --- */
-    max-height: 90vh; /* Allow it to take up most of the screen height */
-    overflow-y: auto; /* Enable vertical scrolling */
-    box-sizing: border-box; /* Include padding in height calculation */
+    max-height: 90vh;
+    overflow-y: auto;
+    box-sizing: border-box;
 }
 
 @keyframes fadeIn {
@@ -68,12 +68,12 @@ h1, h2, h3, h4 {
 }
 
 .auth-card input,
-.auth-card select { /* Apply to select elements too */
+.auth-card select {
     padding: 12px 15px;
     margin-bottom: 15px;
     border: 1px solid #ced4da;
     border-radius: 8px;
-    width: calc(100% - 30px); /* Adjust for padding */
+    width: calc(100% - 30px);
     font-size: 1em;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08);
 }
@@ -95,7 +95,7 @@ h1, h2, h3, h4 {
     font-size: 1.1em;
     margin-top: 15px;
     transition: background-color 0.3s ease, transform 0.1s ease;
-    width: calc(100% - 30px); /* Adjust for padding */
+    width: calc(100% - 30px);
 }
 
 .auth-card button:hover {
@@ -125,8 +125,7 @@ h1, h2, h3, h4 {
     color: #0056b3;
 }
 
-
-/* --- App Section (No changes here, keeping previous styles) --- */
+/* --- App Section --- */
 .app-container {
     display: flex;
     flex-direction: column;
@@ -142,37 +141,85 @@ h1, h2, h3, h4 {
     margin-bottom: 15px;
 }
 
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
 #currentUserDisplay {
     font-weight: bold;
     color: #34495e;
     font-size: 1.1em;
 }
 
-.header button {
-    background-color: #6c757d;
+.header-icon-button {
+    background: none;
+    border: none;
+    color: #6c757d;
+    cursor: pointer;
+    font-size: 24px;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.header-icon-button:hover {
+    background-color: #f0f2f5;
+    color: #343a40;
+}
+
+/* Settings Menu */
+.settings-menu {
+    position: absolute;
+    top: 60px;
+    right: 25px;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 150px;
+}
+
+.settings-menu button {
+    background-color: #007bff;
     color: white;
     border: none;
-    padding: 8px 15px;
+    padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
     font-size: 0.9em;
-    margin-left: 10px;
     transition: background-color 0.3s ease;
+    width: 100%;
+    text-align: left;
 }
 
-.header button:hover {
-    background-color: #5a6268;
+.settings-menu button#logoutButton {
+    background-color: #dc3545;
 }
 
+.settings-menu button:hover {
+    background-color: #0056b3;
+}
+.settings-menu button#logoutButton:hover {
+    background-color: #c82333;
+}
+
+/* Main Content */
 .main-content {
     display: flex;
     flex-grow: 1;
-    overflow: hidden; /* Ensure panels handle their own scroll */
+    overflow: hidden;
 }
 
 /* User List Panel */
 .user-list-panel {
-    flex: 0 0 280px; /* Fixed width for desktop, slightly wider */
+    flex: 0 0 280px;
     border-right: 1px solid #e0e0e0;
     padding-right: 15px;
     margin-right: 15px;
@@ -209,7 +256,7 @@ h1, h2, h3, h4 {
     font-size: 1em;
     border-radius: 5px;
     margin-bottom: 4px;
-    justify-content: space-between; /* To space out name and view profile button */
+    justify-content: space-between;
 }
 
 .user-list-item:hover {
@@ -218,23 +265,23 @@ h1, h2, h3, h4 {
 }
 
 .user-list-item.selected {
-    background-color: #d4edda; /* Muted green for selection */
+    background-color: #d4edda;
     font-weight: bold;
     color: #216a3e;
     box-shadow: 0 2px 5px rgba(0, 123, 255, 0.1);
 }
 
 .user-list-item.not-friend {
-    opacity: 0.6; /* Dim users who are not friends */
+    opacity: 0.6;
     cursor: not-allowed;
 }
 
 .user-list-item.not-friend:hover {
-    background-color: #f8f9fa; /* Lighter hover for non-friends */
+    background-color: #f8f9fa;
     transform: none;
 }
 
-.user-list-item .profile-link { /* Style for View Profile button */
+.user-list-item .profile-link {
     background-color: #5cb85c;
     color: white;
     border: none;
@@ -249,7 +296,6 @@ h1, h2, h3, h4 {
 .user-list-item .profile-link:hover {
     background-color: #4cae4c;
 }
-
 
 /* Find Friend Area */
 .find-friend-area {
@@ -266,11 +312,11 @@ h1, h2, h3, h4 {
     border: 1px solid #ced4da;
     border-radius: 5px;
     font-size: 0.9em;
-    width: calc(100% - 20px); /* Adjust for padding */
+    width: calc(100% - 20px);
 }
 
 .find-friend-area button {
-    background-color: #28a745; /* Green for add */
+    background-color: #28a745;
     color: white;
     border: none;
     padding: 10px 15px;
@@ -297,7 +343,6 @@ h1, h2, h3, h4 {
     margin-top: 5px;
 }
 
-
 /* Chat Panel */
 .chat-panel {
     flex-grow: 1;
@@ -321,34 +366,34 @@ h1, h2, h3, h4 {
     flex-grow: 1;
     overflow-y: auto;
     margin-bottom: 15px;
-    background-color: #fcfdff; /* Lighter background for messages */
+    background-color: #fcfdff;
     display: flex;
     flex-direction: column;
-    gap: 8px; /* Space between messages */
+    gap: 8px;
 }
 
 .message {
-    background-color: #e1ffc7; /* Light green for messages */
+    background-color: #e1ffc7;
     padding: 10px 15px;
-    border-radius: 20px; /* More rounded bubbles */
+    border-radius: 20px;
     max-width: 75%;
     word-wrap: break-word;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
     align-self: flex-start;
-    position: relative; /* For timestamp positioning and actions */
+    position: relative;
     display: flex;
     flex-direction: column;
-    cursor: pointer; /* Make messages clickable for selection */
+    cursor: pointer;
     transition: background-color 0.2s ease;
 }
 
 .message.sent {
-    background-color: #dcf8c6; /* Lighter green for sent messages to differentiate from received */
+    background-color: #dcf8c6;
     align-self: flex-end;
 }
 
 .message.selected-for-delete {
-    background-color: #ffe0b2; /* Light orange for selected messages */
+    background-color: #ffe0b2;
     border: 1px solid #ff9800;
 }
 
@@ -357,35 +402,34 @@ h1, h2, h3, h4 {
     color: #4a6572;
     margin-bottom: 3px;
     font-weight: bold;
-    display: block; /* Ensure sender name is on its own line */
+    display: block;
 }
 
 .message .message-text {
-    word-break: break-word; /* Ensure long words break */
+    word-break: break-word;
 }
 
 .message .message-image {
     max-width: 100%;
     border-radius: 8px;
     margin-top: 5px;
-    display: block; /* Ensures image takes its own line within the message */
+    display: block;
 }
 
 .message .timestamp {
     font-size: 0.75em;
     color: #888;
-    align-self: flex-end; /* Align timestamp to the right within the bubble */
-    margin-top: 5px; /* Space from message text/image */
+    align-self: flex-end;
+    margin-top: 5px;
 }
 .message.sent .timestamp {
-    align-self: flex-start; /* For sent messages, timestamp on left */
+    align-self: flex-start;
 }
-
 
 .message .actions {
     position: absolute;
-    bottom: -10px; /* Adjust as needed */
-    right: 5px; /* Adjust as needed */
+    bottom: -10px;
+    right: 5px;
     display: flex;
     gap: 5px;
     background-color: rgba(255, 255, 255, 0.9);
@@ -394,16 +438,16 @@ h1, h2, h3, h4 {
     box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     opacity: 0;
     transition: opacity 0.2s ease-in-out;
-    pointer-events: none; /* Make actions non-interactable until hovered */
+    pointer-events: none;
 }
 
 .message.sent .actions {
-    right: 5px; /* Consistent for sent messages */
+    right: 5px;
 }
 
 .message:hover .actions {
     opacity: 1;
-    pointer-events: auto; /* Enable interaction on hover */
+    pointer-events: auto;
 }
 
 .message .actions button {
@@ -421,20 +465,19 @@ h1, h2, h3, h4 {
     background-color: #e0e0e0;
 }
 
-
 .input-area {
     display: flex;
     gap: 10px;
     padding-top: 10px;
     border-top: 1px solid #f0f0f0;
-    align-items: center; /* Vertically align items in input area */
+    align-items: center;
 }
 
 #messageInput {
     flex-grow: 1;
     padding: 12px;
     border: 1px solid #ced4da;
-    border-radius: 25px; /* Pill shape */
+    border-radius: 25px;
     font-size: 1em;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08);
 }
@@ -447,11 +490,11 @@ h1, h2, h3, h4 {
 
 .image-upload-label {
     cursor: pointer;
-    font-size: 1.8em; /* Icon size */
+    font-size: 1.8em;
     color: #007bff;
     transition: color 0.2s ease;
-    padding: 5px; /* Add some padding around the icon */
-    border-radius: 50%; /* Make it round */
+    padding: 5px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -467,7 +510,7 @@ h1, h2, h3, h4 {
     color: white;
     border: none;
     padding: 12px 20px;
-    border-radius: 25px; /* Pill shape */
+    border-radius: 25px;
     cursor: pointer;
     font-size: 1em;
     transition: background-color 0.3s ease, transform 0.1s ease;
@@ -487,13 +530,13 @@ h1, h2, h3, h4 {
 .chat-actions {
     display: flex;
     justify-content: flex-end;
-    margin-bottom: 10px; /* Space above input area */
-    padding-top: 10px; /* Space below messages area */
+    margin-bottom: 10px;
+    padding-top: 10px;
     border-top: 1px solid #f0f0f0;
 }
 
 .chat-actions button {
-    background-color: #dc3545; /* Red for delete */
+    background-color: #dc3545;
     color: white;
     border: none;
     padding: 8px 15px;
@@ -519,7 +562,7 @@ h1, h2, h3, h4 {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.6); /* Darker overlay */
+    background-color: rgba(0, 0, 0, 0.6);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -534,14 +577,14 @@ h1, h2, h3, h4 {
     width: 90%;
     max-width: 450px;
     text-align: center;
-    animation: fadeIn 0.3s ease-out; /* Simple fade-in animation */
-    display: flex; /* Make it a flex container */
-    flex-direction: column; /* Stack children vertically */
-    gap: 15px; /* Spacing between sections */
+    animation: fadeIn 0.3s ease-out;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 
-    max-height: 90vh; /* Limit height to 90% of viewport height */
-    overflow-y: auto; /* Enable vertical scrolling if content overflows */
-    box-sizing: border-box; /* Include padding in height calculation */
+    max-height: 90vh;
+    overflow-y: auto;
+    box-sizing: border-box;
 }
 
 @keyframes fadeIn {
@@ -553,13 +596,13 @@ h1, h2, h3, h4 {
     margin-top: 0;
     color: #34495e;
     font-size: 1.8em;
-    margin-bottom: 10px; /* Adjusted margin */
+    margin-bottom: 10px;
 }
 
 .profile-fields {
     display: flex;
     flex-direction: column;
-    gap: 10px; /* Spacing between form fields */
+    gap: 10px;
     text-align: left;
 }
 
@@ -568,14 +611,14 @@ h1, h2, h3, h4 {
     font-weight: bold;
     color: #555;
     font-size: 1em;
-    margin-top: 5px; /* Space between label and input */
-    margin-bottom: -5px; /* Pull label closer to input */
+    margin-top: 5px;
+    margin-bottom: -5px;
 }
 
 .profile-fields input,
 .profile-fields textarea,
 .profile-fields select {
-    width: calc(100% - 24px); /* Account for padding */
+    width: calc(100% - 24px);
     padding: 12px;
     border: 1px solid #ced4da;
     border-radius: 8px;
@@ -584,31 +627,29 @@ h1, h2, h3, h4 {
 }
 
 .profile-fields textarea {
-    resize: vertical; /* Allow textarea to be resized vertically */
-    min-height: 60px; /* Slightly smaller min-height for bio */
+    resize: vertical;
+    min-height: 60px;
     max-height: 150px;
 }
 
-/* Style for read-only/disabled fields */
 .profile-fields input:read-only, 
 .profile-fields textarea:read-only, 
 .profile-fields select:disabled {
-    background-color: #e9ecef; /* Light gray background for disabled/read-only */
+    background-color: #e9ecef;
     cursor: default;
-    color: #666; /* Slightly muted text color */
+    color: #666;
 }
-
 
 .profile-actions {
     display: flex;
     justify-content: center;
-    gap: 10px; /* Spacing between action buttons */
+    gap: 10px;
     margin-top: 20px;
-    flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+    flex-wrap: wrap;
 }
 
 .modal-content button {
-    background-color: #28a745; /* Green for save */
+    background-color: #28a745;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -624,19 +665,17 @@ h1, h2, h3, h4 {
 }
 
 .modal-content button#closeProfileModal,
-.modal-content button#closeEditMessageModal { /* Close button */
-    background-color: #dc3545; /* Red for close */
+.modal-content button#closeEditMessageModal {
+    background-color: #dc3545;
 }
 
-/* New: Danger button style for Unfriend */
 .danger-button {
-    background-color: #dc3545 !important; /* Important to override other button styles */
+    background-color: #dc3545 !important;
 }
 
 .danger-button:hover {
     background-color: #c82333 !important;
 }
-
 
 /* --- Utility Classes --- */
 .hidden {
@@ -651,77 +690,80 @@ h1, h2, h3, h4 {
 }
 
 /* --- Responsive Design (Media Queries) --- */
-
 /* For screens smaller than 768px (e.g., mobile devices) */
 @media (max-width: 768px) {
     .container {
         padding: 15px;
-        height: 95vh; /* Take more height on mobile */
+        height: 95vh;
     }
 
     .auth-card {
-        max-width: 100%; /* Full width on smaller screens */
+        max-width: 100%;
         padding: 20px;
     }
 
     .auth-card input,
     .auth-card select,
     .auth-card button {
-        width: calc(100% - 20px); /* Adjust for padding */
+        width: calc(100% - 20px);
     }
 
     .header {
-        flex-direction: column;
-        align-items: flex-start;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
         padding-bottom: 10px;
         margin-bottom: 10px;
     }
-
+    
     #currentUserDisplay {
-        margin-bottom: 10px;
+        margin-bottom: 0;
         font-size: 1em;
     }
-
-    .header button {
-        width: 100%;
-        margin-left: 0;
-        margin-top: 5px;
+    
+    .header-icon-button {
+        font-size: 20px;
+        padding: 6px;
     }
 
     .main-content {
-        flex-direction: column; /* Stack user list and chat vertically */
-        overflow-y: auto; /* Allow scrolling of the whole content area */
+        flex-direction: column;
+        overflow-y: auto;
     }
 
+    /* Mobile specific styles for user list panel */
     .user-list-panel {
-        flex: none; /* Remove fixed width */
-        width: 100%;
-        border-right: none; /* Remove border */
-        border-bottom: 1px solid #e0e0e0; /* Add bottom border */
-        padding-right: 0;
-        margin-right: 0;
-        padding-bottom: 15px;
-        margin-bottom: 15px;
-        max-height: 200px; /* Limit height of user list on mobile */
+        position: fixed;
+        top: 0;
+        left: -100%; /* Initially off-screen */
+        width: 80%;
+        max-width: 300px;
+        height: 100%;
+        background-color: #fff;
+        z-index: 900;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+        transition: left 0.3s ease-in-out;
+        border-right: none;
+        padding: 20px;
+        box-sizing: border-box;
     }
-    
-    .user-list-panel h3, .user-list-panel h4, #chatPartnerDisplay {
-        font-size: 1.3em;
-        padding-bottom: 8px;
+
+    .user-list-panel.show {
+        left: 0; /* Slide in from left */
     }
 
     .chat-panel {
-        flex-grow: 1; /* Allow chat panel to expand */
+        flex-grow: 1;
     }
 
     .messages-area {
-        min-height: 200px; /* Ensure chat area has minimum height */
+        min-height: 200px;
         padding: 10px;
         font-size: 0.95em;
     }
 
     .message {
-        max-width: 90%; /* Wider messages on small screens */
+        max-width: 90%;
         padding: 8px 12px;
         border-radius: 15px;
     }
@@ -734,25 +776,25 @@ h1, h2, h3, h4 {
     }
 
     .input-area {
-        flex-direction: column; /* Stack input and button vertically */
+        flex-direction: row;
         gap: 8px;
     }
 
     #messageInput {
-        width: calc(100% - 24px); /* Adjust width */
-        border-radius: 8px; /* Less rounded for mobile input */
+        width: calc(100% - 24px);
+        border-radius: 25px;
     }
 
     #sendButton {
-        width: 100%;
-        border-radius: 8px; /* Less rounded for mobile button */
+        width: auto;
+        border-radius: 25px;
     }
 
-    /* --- Modal Adjustments for Mobile --- */
+    /* Modal Adjustments for Mobile */
     .modal-content {
         padding: 20px;
         font-size: 0.95em;
-        max-height: 95vh; /* Take more height on mobile for modal */
+        max-height: 95vh;
     }
     
     .modal-content h3 {
@@ -761,14 +803,21 @@ h1, h2, h3, h4 {
     }
 
     .profile-actions {
-        flex-direction: column; /* Stack buttons vertically on mobile */
+        flex-direction: column;
     }
     .modal-content button {
         width: 100%;
     }
 
     .chat-actions {
-        justify-content: center; /* Center the delete button on mobile */
+        justify-content: center;
+    }
+    
+    /* Settings Menu position on mobile */
+    .settings-menu {
+        top: 55px;
+        right: 15px;
+        width: 150px;
     }
 }
 
@@ -783,11 +832,6 @@ h1, h2, h3, h4 {
     .auth-card button {
         font-size: 0.95em;
         padding: 10px 12px;
-    }
-
-    .header button {
-        padding: 6px 10px;
-        font-size: 0.85em;
     }
 
     .user-list-item {

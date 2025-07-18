@@ -22,13 +22,17 @@ const signupCountryInput = document.getElementById('signupCountryInput');
 const signupEthnicityInput = document.getElementById('signupEthnicityInput');
 const signupStateInput = document.getElementById('signupStateInput');
 const signupCityInput = document.getElementById('signupCityInput');
-const signupDateInput = document.getElementById('signupDateInput'); // NEW: Signup Date Input
+const signupDateInput = document.getElementById('signupDateInput');
 const signupButton = document.getElementById('signupButton');
 const signupError = document.getElementById('signup-error');
 
 // DOM elements for App
 const appSection = document.getElementById('app-section');
 const currentUserDisplay = document.getElementById('currentUserDisplay');
+const usersButton = document.getElementById('usersButton'); // NEW
+const userListPanel = document.getElementById('user-list-panel'); // NEW
+const settingsButton = document.getElementById('settingsButton');
+const settingsMenu = document.getElementById('settings-menu');
 const logoutButton = document.getElementById('logoutButton');
 const profileButton = document.getElementById('profileButton');
 
@@ -62,7 +66,7 @@ const countryInput = document.getElementById('countryInput');
 const ethnicityInput = document.getElementById('ethnicityInput');
 const stateInput = document.getElementById('stateInput');
 const cityInput = document.getElementById('cityInput');
-const signupDateDisplay = document.getElementById('signupDateDisplay'); // NEW: Signup Date Display in Profile
+const signupDateDisplay = document.getElementById('signupDateDisplay');
 
 const saveProfileButton = document.getElementById('saveProfileButton');
 const closeProfileModal = document.getElementById('closeProfileModal');
@@ -92,11 +96,10 @@ let currentlyViewedProfileUid = null;
 showSignupButton.addEventListener('click', () => {
     loginView.classList.add('hidden');
     signupView.classList.remove('hidden');
-    loginError.textContent = ''; // Clear previous errors
-    // Set signup date to today's date when opening signup form
+    loginError.textContent = '';
     const today = new Date();
     const yyyy = today.getFullYear();
-    const mm = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
     const dd = String(today.getDate()).padStart(2, '0');
     signupDateInput.value = `${yyyy}-${mm}-${dd}`;
 });
@@ -104,7 +107,7 @@ showSignupButton.addEventListener('click', () => {
 showLoginButton.addEventListener('click', () => {
     signupView.classList.add('hidden');
     loginView.classList.remove('hidden');
-    signupError.textContent = ''; // Clear previous errors
+    signupError.textContent = '';
 });
 
 // --- Authentication Handlers ---
@@ -119,16 +122,16 @@ signupButton.addEventListener('click', async () => {
     const ethnicity = signupEthnicityInput.value.trim();
     const state = signupStateInput.value.trim();
     const city = signupCityInput.value.trim();
-    const signupDate = signupDateInput.value; // NEW: Get signup date
+    const signupDate = signupDateInput.value;
 
     signupError.textContent = '';
 
     if (!email || !password || !username) {
-        signupError.textContent = 'အီးမေး၊ ငဝ်းပလို့ꩻ တွမ်ႏ ကေားသွုံꩻသား အမဉ်ꩻ လꩻတဝ်းဒွိုန်းဩ။'; // Email, password and username are required.
+        signupError.textContent = 'အီးမေး၊ ငဝ်းပလို့ꩻ တွမ်ႏ ကေားသွုံꩻသား အမဉ်ꩻ လꩻတဝ်းဒွိုန်းဩ။';
         return;
     }
     if (password.length < 4) {
-        signupError.textContent = 'ငဝ်းပလို့ꩻ လိတ်(4)ဖြုံႏ မာꩻကီမꩻလꩻဩ။'; // Password should be at least 6 characters.
+        signupError.textContent = 'ငဝ်းပလို့ꩻ လိတ်(4)ဖြုံႏ မာꩻကီမꩻလꩻဩ။';
         return;
     }
 
@@ -137,7 +140,6 @@ signupButton.addEventListener('click', async () => {
         await userCredential.user.updateProfile({
             displayName: username
         });
-        // Initialize user data in database with detailed default values
         await usersRef.child(userCredential.user.uid).set({
             email: email,
             displayName: username,
@@ -145,20 +147,19 @@ signupButton.addEventListener('click', async () => {
             bio: '',
             hobbies: '',
             gender: gender,
-            age: age ? parseInt(age) : null, // Store as number
+            age: age ? parseInt(age) : null,
             born: born,
             country: country,
             ethnicity: ethnicity,
             state: state,
             city: city,
-            signupDate: signupDate // NEW: Save signup date
+            signupDate: signupDate
         });
-        alert('ဒင်ႏသွင်ꩻမဉ်ꩻ ထွူလဲဉ်း! ယိုခါ နာꩻ နွို့ငါ နွောင်ꩻလဲဉ်းဩ။'); // Sign up successful! You can now log in.
-        // Switch to login view after successful signup
+        alert('ဒင်ႏသွင်ꩻမဉ်ꩻ ထွူလဲဉ်း! ယိုခါ နာꩻ နွို့ငါ နွောင်ꩻလဲဉ်းဩ။');
         signupView.classList.add('hidden');
         loginView.classList.remove('hidden');
-        loginEmailInput.value = email; // Pre-fill login email
-        loginPasswordInput.value = ''; // Clear password
+        loginEmailInput.value = email;
+        loginPasswordInput.value = '';
     } catch (error) {
         signupError.textContent = error.message;
     }
@@ -167,57 +168,71 @@ signupButton.addEventListener('click', async () => {
 loginButton.addEventListener('click', async () => {
     const email = loginEmailInput.value.trim();
     const password = loginPasswordInput.value.trim();
-    loginError.textContent = ''; // Clear previous errors
+    loginError.textContent = '';
 
-    // --- Start: Custom Client-Side Validation to hide Firebase errors ---
     if (!email && !password) {
-        loginError.textContent = 'ထဲမ်သော့ꩻဖေႏသွော့ꩻ အီးမေးတွမ်ႏ ငဝ်းပလို့ꩻ ဟုဲင်းဩ'; // Please enter email and password.
-        return; // Stop execution
+        loginError.textContent = 'ထဲမ်သော့ꩻဖေႏသွော့ꩻ အီးမေးတွမ်ႏ ငဝ်းပလို့ꩻ ဟုဲင်းဩ';
+        return;
     }
 
     if (!email) {
-        loginError.textContent = 'ထဲမ်သော့ꩻဖေႏသွော့ꩻ အီးမေး ဟုဲင်းဩ'; // Please enter your email.
+        loginError.textContent = 'ထဲမ်သော့ꩻဖေႏသွော့ꩻ အီးမေး ဟုဲင်းဩ';
         return;
     }
 
     if (!password) {
-        loginError.textContent = 'ထဲမ်သော့ꩻဖေႏသွော့ꩻ ငဝ်းပလို့ꩻ ဟုဲင်းဩ'; // Please enter your password.
+        loginError.textContent = 'ထဲမ်သော့ꩻဖေႏသွော့ꩻ ငဝ်းပလို့ꩻ ဟုဲင်းဩ';
         return;
     }
-    // Simple regex for email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-        loginError.textContent = 'တဲမ်း အီးမေး တမဲဉ်ႏတဝ်းသွူဩ'; // Invalid email format.
+        loginError.textContent = 'တဲမ်း အီးမေး တမဲဉ်ႏတဝ်းသွူဩ';
         return;
     }
-    // --- End: Custom Client-Side Validation ---
 
     try {
         await auth.signInWithEmailAndPassword(email, password);
     } catch (error) {
-        // Handle Firebase specific errors, but with a generic message for security
-        console.error("Firebase Login Error:", error.code, error.message); // Log full error for debugging
+        console.error("Firebase Login Error:", error.code, error.message);
         if (error.code === 'auth/invalid-email' ||
             error.code === 'auth/user-disabled' ||
             error.code === 'auth/user-not-found' ||
             error.code === 'auth/wrong-password') {
-            
-            // Show a generic, less informative message to the user
-            loginError.textContent = 'အီးမေး မွေးတဝ်းလဲ့ ငဝ်းပလို့ꩻ တမဲဉ်ႏတဝ်းသွူဩ'; // Invalid email or password.
+            loginError.textContent = 'အီးမေး မွေးတဝ်းလဲ့ ငဝ်းပလို့ꩻ တမဲဉ်ႏတဝ်းသွူဩ';
         } else {
-            // For any other unexpected errors, show a general error
-            loginError.textContent = 'အဝ်ႏနွို့ငါတွင်ꩻ ထွာလွဉ် အမာႏ။ ဆုဲင်ꩻမꩻ မာꩻချာစံꩻ ယင်းဟုဲင်း။'; // An error occurred during login. Please try again later.
+            loginError.textContent = 'အဝ်ႏနွို့ငါတွင်ꩻ ထွာလွဉ် အမာႏ။ ဆုဲင်ꩻမꩻ မာꩻချာစံꩻ ယင်းဟုဲင်း။';
         }
+    }
+});
+
+// NEW: Users button toggles the user list panel on mobile
+usersButton.addEventListener('click', () => {
+    userListPanel.classList.toggle('show');
+});
+
+// Settings Button Toggles the Menu
+settingsButton.addEventListener('click', (event) => {
+    event.stopPropagation();
+    settingsMenu.classList.toggle('hidden');
+});
+
+// Close Settings Menu and User List Panel when clicking outside
+document.addEventListener('click', (event) => {
+    if (!settingsMenu.classList.contains('hidden') && !settingsMenu.contains(event.target) && event.target !== settingsButton) {
+        settingsMenu.classList.add('hidden');
+    }
+    if (window.innerWidth <= 768 && userListPanel.classList.contains('show') && !userListPanel.contains(event.target) && event.target !== usersButton) {
+        userListPanel.classList.remove('show');
     }
 });
 
 logoutButton.addEventListener('click', async () => {
     try {
         if (currentUserId) {
-            // Update status to offline before signing out
             await usersRef.child(currentUserId).update({ status: 'offline ' });
         }
         await auth.signOut();
+        settingsMenu.classList.add('hidden');
     } catch (error) {
         console.error("Error logging out:", error);
     }
@@ -227,7 +242,6 @@ logoutButton.addEventListener('click', async () => {
 auth.onAuthStateChanged(user => {
     if (user) {
         currentUserId = user.uid;
-        // Fetch current user's full data including updated display name
         usersRef.child(currentUserId).once('value', (snapshot) => {
             if (snapshot.exists()) {
                 const userData = snapshot.val();
@@ -235,11 +249,10 @@ auth.onAuthStateChanged(user => {
                 currentUserDisplay.textContent = `နွို့ငါသားမဉ်ꩻ: ${currentUserDisplayName}`;
                 usersRef.child(currentUserId).update({
                     status: 'online',
-                    displayName: currentUserDisplayName // Ensure displayName is updated from auth if it's new
+                    displayName: currentUserDisplayName
                 });
             } else {
-                 // If for some reason user node doesn't exist (e.g., directly logged in from old data), create it with basic data
-                const today = new Date();
+                 const today = new Date();
                 const yyyy = today.getFullYear();
                 const mm = String(today.getMonth() + 1).padStart(2, '0');
                 const dd = String(today.getDate()).padStart(2, '0');
@@ -251,7 +264,7 @@ auth.onAuthStateChanged(user => {
                     status: 'online',
                     bio: '', hobbies: '', gender: '', age: null, born: '',
                     country: '', ethnicity: '', 'state': '', city: '',
-                    signupDate: signupDate // NEW: Save signup date if creating new user node
+                    signupDate: signupDate
                 });
                 currentUserDisplayName = user.displayName || user.email.split('@')[0];
                 currentUserDisplay.textContent = `နွို့ငါသားမဉ်ꩻ: ${currentUserDisplayName}`;
@@ -261,12 +274,11 @@ auth.onAuthStateChanged(user => {
         authSection.classList.add('hidden');
         appSection.classList.remove('hidden');
 
-        loadFriends(); // Load friends list
-        loadAllUsersForFriendSearch(); // Load all users for finding friends
-        selectPublicChat(); // Auto-select public chat on login
+        loadFriends();
+        loadAllUsersForFriendSearch();
+        selectPublicChat();
 
     } else {
-        // Reset all global variables and UI when logged out
         currentUserId = null;
         currentUserDisplayName = 'Anonymous';
         selectedChatPartnerId = null;
@@ -281,7 +293,6 @@ auth.onAuthStateChanged(user => {
         authSection.classList.remove('hidden');
         appSection.classList.add('hidden');
 
-        // Clear UI elements
         loginEmailInput.value = '';
         loginPasswordInput.value = '';
         signupEmailInput.value = '';
@@ -294,12 +305,12 @@ auth.onAuthStateChanged(user => {
         signupEthnicityInput.value = '';
         signupStateInput.value = '';
         signupCityInput.value = '';
-        signupDateInput.value = ''; // NEW: Clear signup date input
+        signupDateInput.value = '';
         loginError.textContent = '';
         signupError.textContent = '';
 
         friendList.innerHTML = '';
-        userList.querySelector('#publicChatOption').classList.remove('လွိုက်လဲဉ်း');
+        userList.querySelector('#publicChatOption').classList.remove('selected');
         chatPartnerDisplay.textContent = 'လွိုက် ဒေါ့ꩻရီ';
         messagesDiv.innerHTML = '';
         messageInput.value = '';
@@ -311,7 +322,6 @@ auth.onAuthStateChanged(user => {
         deleteSelectedMessagesButton.classList.add('hidden');
         unfriendButton.classList.add('hidden');
 
-        // Ensure login view is shown on logout
         loginView.classList.remove('hidden');
         signupView.classList.add('hidden');
     }
@@ -319,24 +329,23 @@ auth.onAuthStateChanged(user => {
 
 // --- Profile Management ---
 profileButton.addEventListener('click', () => {
-    // When "My Profile" is clicked, it's always editable
+    settingsMenu.classList.add('hidden');
     profileModalTitle.textContent = 'ခွေ နမ်းအအဲဉ်ႏ';
-    setProfileFieldsEditable(true); // Make fields editable
-    saveProfileButton.classList.remove('hidden'); // Ensure save button is visible for own profile
-    unfriendButton.classList.add('hidden'); // Hide unfriend button for own profile
+    setProfileFieldsEditable(true);
+    saveProfileButton.classList.remove('hidden');
+    unfriendButton.classList.add('hidden');
     profileModal.classList.remove('hidden');
     loadUserProfile(currentUserId);
-    currentlyViewedProfileUid = currentUserId; // Set to current user's UID
+    currentlyViewedProfileUid = currentUserId;
 });
 
 closeProfileModal.addEventListener('click', () => {
     profileModal.classList.add('hidden');
-    currentlyViewedProfileUid = null; // Clear viewed profile UID on close
+    currentlyViewedProfileUid = null;
 });
 
-// Helper function to set modal fields to read-only/editable
 function setProfileFieldsEditable(editable) {
-    profileIdDisplay.readOnly = true; // User ID is always read-only
+    profileIdDisplay.readOnly = true;
     displayNameInput.readOnly = !editable;
     bioInput.readOnly = !editable;
     hobbiesInput.readOnly = !editable;
@@ -347,11 +356,9 @@ function setProfileFieldsEditable(editable) {
     ethnicityInput.readOnly = !editable;
     stateInput.readOnly = !editable;
     cityInput.readOnly = !editable;
-    signupDateDisplay.readOnly = true; // NEW: Signup Date is always read-only
-    // saveProfileButton.classList.toggle('hidden', !editable); // Managed by direct calls now
+    signupDateDisplay.readOnly = true;
 }
 
-// Function to load and display profile data
 async function loadUserProfile(uid) {
     try {
         const snapshot = await usersRef.child(uid).once('value');
@@ -368,7 +375,7 @@ async function loadUserProfile(uid) {
             ethnicityInput.value = userData.ethnicity || '';
             stateInput.value = userData.state || '';
             cityInput.value = userData.city || '';
-            signupDateDisplay.value = userData.signupDate || 'N/A'; // NEW: Display signup date
+            signupDateDisplay.value = userData.signupDate || 'N/A';
             profileError.textContent = '';
         } else {
             profileError.textContent = "မော့ꩻတဝ်း နမ်းအအဲဉ်ႏ လိတ်လာႏ.";
@@ -395,17 +402,15 @@ saveProfileButton.addEventListener('click', async () => {
 
     if (newDisplayName && currentUserId) {
         try {
-            // Update Auth display name
             await auth.currentUser.updateProfile({
                 displayName: newDisplayName
             });
-            // Update user data in Realtime Database
             await usersRef.child(currentUserId).update({
                 displayName: newDisplayName,
                 bio: newBio,
                 hobbies: newHobbies,
                 gender: newGender,
-                age: newAge ? parseInt(newAge) : null, // Ensure age is stored as number
+                age: newAge ? parseInt(newAge) : null,
                 born: newBorn,
                 country: newCountry,
                 ethnicity: newEthnicity,
@@ -415,7 +420,7 @@ saveProfileButton.addEventListener('click', async () => {
             currentUserDisplayName = newDisplayName;
             currentUserDisplay.textContent = `နွို့ငါသားမဉ်ꩻ: ${currentUserDisplayName}`;
             profileModal.classList.add('hidden');
-            loadFriends(); // Reload friends to update display names if needed
+            loadFriends();
         } catch (error) {
             profileError.textContent = "ဒင်ႏသွင်ꩻ နမ်းအအဲဉ်ႏတွင်ꩻ အမာႏအဝ်ႏ: " + error.message;
         }
@@ -426,7 +431,7 @@ saveProfileButton.addEventListener('click', async () => {
 
 
 // --- Friends Management ---
-let allUsersData = {}; // Cache all users for friend search
+let allUsersData = {};
 
 function loadAllUsersForFriendSearch() {
     usersRef.on('value', (snapshot) => {
@@ -454,14 +459,12 @@ findFriendButton.addEventListener('click', async () => {
         let foundUser = null;
         for (const uid in allUsersData) {
             const user = allUsersData[uid];
-            // Skip current user and already friends
             if (uid === currentUserId || (allUsersData[currentUserId].friends && allUsersData[currentUserId].friends[uid])) {
                 continue;
             }
-            // Search by Email, Display Name, or UID
             if (user.email.toLowerCase() === searchTerm ||
                 (user.displayName && user.displayName.toLowerCase().includes(searchTerm)) ||
-                uid.toLowerCase() === searchTerm // Search by UID
+                uid.toLowerCase() === searchTerm
             ) {
                 foundUser = { uid, ...user };
                 break;
@@ -524,24 +527,27 @@ function loadFriends() {
                             viewProfileButton.classList.add('profile-link');
                             viewProfileButton.textContent = 'ထွား နမ်းအအဲဉ်ႏ';
                             viewProfileButton.addEventListener('click', (e) => {
-                                e.stopPropagation(); // Prevent opening chat when viewing profile
+                                e.stopPropagation();
                                 profileModalTitle.textContent = `${friend.displayName || 'User'}'တဖြာꩻ နမ်းအအဲဉ်ႏ`;
-                                setProfileFieldsEditable(false); // Make fields read-only
-                                saveProfileButton.classList.add('hidden'); // Hide save button for friend's profile
-                                unfriendButton.classList.remove('hidden'); // Show unfriend button
-                                unfriendButton.dataset.friendUid = friendUid; // Store the friend's UID
+                                setProfileFieldsEditable(false);
+                                saveProfileButton.classList.add('hidden');
+                                unfriendButton.classList.remove('hidden');
+                                unfriendButton.dataset.friendUid = friendUid;
                                 profileModal.classList.remove('hidden');
                                 loadUserProfile(friendUid);
-                                currentlyViewedProfileUid = friendUid; // Set to friend's UID
+                                currentlyViewedProfileUid = friendUid;
                             });
 
                             listItem.appendChild(friendNameSpan);
                             listItem.appendChild(viewProfileButton);
                             
                             listItem.addEventListener('click', (event) => {
-                                // Only allow clicking if the event target is not the profile button
                                 if (event.target !== viewProfileButton) {
                                     selectChatPartner(friendUid, friend.displayName || 'Unknown User');
+                                    // NEW: Close user list panel on mobile after selecting a chat
+                                    if (window.innerWidth <= 768) {
+                                        userListPanel.classList.remove('show');
+                                    }
                                 }
                             });
                             friendList.appendChild(listItem);
@@ -554,22 +560,18 @@ function loadFriends() {
     });
 }
 
-// New: Unfriend button click handler
 unfriendButton.addEventListener('click', async () => {
     const friendUidToUnfriend = unfriendButton.dataset.friendUid;
     if (friendUidToUnfriend && currentUserId && confirm(`နာꩻမဉ်ꩻထွာသွꩻတဝ်းဒွုမ် ${allUsersData[friendUidToUnfriend].displayName}နဝ်ꩻ စဲင်းစဲ့ဒျာႏနဲ့? `)) {
         try {
-            // Remove from current user's friends list
             await usersRef.child(currentUserId).child('friends').child(friendUidToUnfriend).remove();
-            // Remove current user from friend's friends list
             await usersRef.child(friendUidToUnfriend).child('friends').child(currentUserId).remove();
             
             alert(`မာꩻသွꩻတဝ်းဒွုမ် ${allUsersData[friendUidToUnfriend].displayName} နဝ်ꩻသွူဩ`);
-            profileModal.classList.add('hidden'); // Close modal after unfriending
+            profileModal.classList.add('hidden');
             currentlyViewedProfileUid = null;
-            loadFriends(); // Reload friends list to reflect changes
+            loadFriends();
             
-            // If the unfriended user was the currently selected chat partner, switch to public chat
             if (selectedChatPartnerId === friendUidToUnfriend) {
                 selectPublicChat();
             }
@@ -585,15 +587,17 @@ unfriendButton.addEventListener('click', async () => {
 // --- Chat Switching and Message Sending ---
 publicChatOption.addEventListener('click', () => {
     selectPublicChat();
+    // NEW: Close user list panel on mobile
+    if (window.innerWidth <= 768) {
+        userListPanel.classList.remove('show');
+    }
 });
 
 function selectChat(chatType, id = null, displayName = '') {
-    // Remove 'selected' class from all list items
     document.querySelectorAll('.user-list-item').forEach(item => {
         item.classList.remove('selected');
     });
 
-    // Add 'selected' class to the newly selected item
     if (chatType === 'public') {
         publicChatOption.classList.add('selected');
     } else if (id) {
@@ -603,37 +607,35 @@ function selectChat(chatType, id = null, displayName = '') {
         }
     }
 
-    // Detach previous listeners if any
     if (currentChatRef) {
         currentChatRef.off('child_added');
         currentChatRef.off('child_changed');
         currentChatRef.off('child_removed');
     }
 
-    messagesDiv.innerHTML = ''; // Clear previous chat messages
+    messagesDiv.innerHTML = '';
     messageInput.value = '';
-    sendButton.disabled = false; // Enable send button when a chat is selected
-    imageUploadInput.disabled = false; // Enable image upload for all chats initially
+    sendButton.disabled = false;
+    imageUploadInput.disabled = false;
 
     currentChatType = chatType;
-    selectedMessagesForDeletion = []; // Clear selected messages when changing chat
-    updateDeleteButtonVisibility(); // Update button visibility
+    selectedMessagesForDeletion = [];
+    updateDeleteButtonVisibility();
 
     if (chatType === 'public') {
         selectedChatPartnerId = null;
         selectedChatPartnerDisplayName = '';
         chatPartnerDisplay.textContent = 'အုံမွန်းဒေါ့ꩻရီတွမ်ႏ လိုꩻအာ';
         currentChatRef = publicChatRef;
-        chatActions.classList.remove('hidden'); // Show chat actions for public chat
-    } else { // Private chat
-        // Only allow private chat if the selected user is a friend
+        chatActions.classList.remove('hidden');
+    } else {
         if (!allUsersData[currentUserId] || !allUsersData[currentUserId].friends || !allUsersData[currentUserId].friends[id]) {
             chatPartnerDisplay.textContent = 'Not friends. Add them to chat.';
             sendButton.disabled = true;
             imageUploadInput.disabled = true;
             messagesDiv.innerHTML = '<p style="text-align: center; color: #888;">You can only chat with your friends. Add them first!</p>';
-            currentChatRef = null; // No chat ref if not friends
-            chatActions.classList.add('hidden'); // Hide chat actions if not friends
+            currentChatRef = null;
+            chatActions.classList.add('hidden');
             return;
         }
 
@@ -641,7 +643,7 @@ function selectChat(chatType, id = null, displayName = '') {
         selectedChatPartnerDisplayName = displayName;
         chatPartnerDisplay.textContent = `အဝ်ႏဒေါ့ꩻရီတွမ်ႏ: ${selectedChatPartnerDisplayName}`;
         imageUploadInput.disabled = false;
-        chatActions.classList.remove('hidden'); // Show chat actions for private chat
+        chatActions.classList.remove('hidden');
 
         const chatIds = [currentUserId, selectedChatPartnerId].sort();
         const chatId = chatIds[0] + '_' + chatIds[1];
@@ -652,20 +654,17 @@ function selectChat(chatType, id = null, displayName = '') {
         currentChatRef = chatsRef.child(chatId).child('messages');
     }
 
-    // Listen for new messages in the currently selected chat
-    if (currentChatRef) { // Only attach listeners if currentChatRef is valid
+    if (currentChatRef) {
         currentChatRef.on('child_added', (snapshot) => {
             const message = { id: snapshot.key, ...snapshot.val() };
             displayMessage(message);
         });
 
-        // Listen for message changes (edits)
         currentChatRef.on('child_changed', (snapshot) => {
             const updatedMessage = { id: snapshot.key, ...snapshot.val() };
             updateMessageInView(updatedMessage);
         });
 
-        // Listen for message removals (deletes)
         currentChatRef.on('child_removed', (snapshot) => {
             removeMessageFromView(snapshot.key);
         });
@@ -737,7 +736,6 @@ function displayMessage(message) {
 
     if (message.senderId === currentUserId) {
         messageElement.classList.add('sent');
-        // Add click listener for selection only for sent messages
         messageElement.addEventListener('click', () => toggleMessageSelection(message.id, messageElement));
     }
 
@@ -769,7 +767,6 @@ function displayMessage(message) {
     timestampSpan.classList.add('timestamp');
     if (message.timestamp) {
         const date = new Date(message.timestamp);
-        // Format time with AM/PM
         timestampSpan.textContent = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
     }
 
@@ -780,7 +777,7 @@ function displayMessage(message) {
         const editButton = document.createElement('button');
         editButton.textContent = 'မွဉ်းဖျင်';
         editButton.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevent message selection when clicking edit
+            e.stopPropagation();
             if (message.imageUrl) {
                 alert('Cannot edit image messages directly.');
                 return;
@@ -791,7 +788,7 @@ function displayMessage(message) {
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'ယားကုဲင်';
         deleteButton.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevent message selection when clicking delete
+            e.stopPropagation();
             deleteMessage(message.id, message.imageName);
         });
 
@@ -844,7 +841,6 @@ async function removeMessageFromView(messageId) {
     const messageElement = messagesDiv.querySelector(`[data-message-id="${messageId}"]`);
     if (messageElement) {
         messageElement.remove();
-        // Remove from selectedMessagesForDeletion if it was selected
         selectedMessagesForDeletion = selectedMessagesForDeletion.filter(id => id !== messageId);
         updateDeleteButtonVisibility();
     }
@@ -854,11 +850,9 @@ async function removeMessageFromView(messageId) {
 function toggleMessageSelection(messageId, messageElement) {
     const index = selectedMessagesForDeletion.indexOf(messageId);
     if (index > -1) {
-        // Message is already selected, deselect it
         selectedMessagesForDeletion.splice(index, 1);
         messageElement.classList.remove('selected-for-delete');
     } else {
-        // Message is not selected, select it
         selectedMessagesForDeletion.push(messageId);
         messageElement.classList.add('selected-for-delete');
     }
@@ -886,7 +880,7 @@ deleteSelectedMessagesButton.addEventListener('click', async () => {
                 const snapshot = await messageRef.once('value');
                 const messageData = snapshot.val();
 
-                if (messageData && messageData.senderId === currentUserId) { // Only allow sender to delete their own messages
+                if (messageData && messageData.senderId === currentUserId) {
                     await messageRef.remove();
                     if (messageData.imageName) {
                         const imageRef = storageRef.child(`chat_images/${messageData.imageName}`);
@@ -898,7 +892,7 @@ deleteSelectedMessagesButton.addEventListener('click', async () => {
                 }
             });
             await Promise.all(deletePromises);
-            selectedMessagesForDeletion = []; // Clear selection after deletion
+            selectedMessagesForDeletion = [];
             updateDeleteButtonVisibility();
         } catch (error) {
             console.error("Error deleting selected messages:", error);
@@ -946,10 +940,7 @@ async function deleteMessage(messageId, imageName) {
     if (confirm('Are you sure you want to delete this message?')) {
         try {
             if (currentChatRef && messageId) {
-                // Remove from Firebase Realtime Database
                 await currentChatRef.child(messageId).remove();
-                
-                // If it was an image message, delete from Storage
                 if (imageName) {
                     const imageRef = storageRef.child(`chat_images/${imageName}`);
                     await imageRef.delete();
@@ -963,7 +954,7 @@ async function deleteMessage(messageId, imageName) {
     }
 }
 
-// Initial state: Ensure app section is hidden and login view is shown on page load
+// Initial state
 appSection.classList.add('hidden');
 loginView.classList.remove('hidden');
 signupView.classList.add('hidden');
