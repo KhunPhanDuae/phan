@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>အရန်းထို ဒေါ့ꩻရီဝင်ꩻတာႏ</title>
+    <title>နွို့ဗွောင်သွုံꩻဖြာꩻ</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
@@ -48,129 +48,10 @@
                 <p id="signup-error" class="error-message"></p>
             </div>
         </div>
-
-        <div id="app-section" class="app-container hidden">
-            <div class="header">
-                <div class="header-left">
-                    <button id="usersButton" class="header-icon-button material-icons">group</button>
-                    <span id="currentUserDisplay"></span>
-                </div>
-                <button id="settingsButton" class="header-icon-button material-icons">more_vert</button>
-            </div>
-
-            <div class="main-content">
-                <div id="user-list-panel" class="user-list-panel">
-                    <h3>ဒေါ့ꩻရီဝင်ꩻ</h3>
-                    <ul id="userList" class="user-list">
-                        <li class="user-list-item" data-chat-type="public" id="publicChatOption">
-                            ဒေါ့ꩻရီအုံကိုမ်ဝင်ꩻ
-                        </li>
-                    </ul>
-                    <hr style="margin: 10px 0; border-color: #eee;">
-                    <h4>ခွေ သွꩻဖုံႏ</h4>
-                    <ul id="friendList" class="user-list">
-                    </ul>
-
-                    <h4 style="margin-top: 20px;">ထိုမ်ႏ သွꩻဖုံႏ</h4>
-                    <div class="find-friend-area">
-                        <input type="text" id="findFriendInput" placeholder="ထိုမ်ႏတွမ်ႏ အီးမေး၊ အမဉ်ꩻ မွေးတဝ်းလဲ့ အုဲင်ဒီ">
-                        <button id="findFriendButton">ထိုမ်ႏထွား</button>
-                        <p id="findFriendResult" class="info-message"></p>
-                        <button id="addFriendButton" class="hidden">ပေါင်ꩻသော့ꩻ သွꩻ</button>
-                    </div>
-                </div>
-
-                <div class="chat-panel">
-                    <h3 id="chatPartnerDisplay">လွိုက် ဒေါ့ꩻရီ</h3>
-                    <div id="messages" class="messages-area">
-                    </div>
-                    <div class="chat-actions hidden" id="chatActions">
-                        <button id="deleteSelectedMessagesButton" class="danger-button hidden">လွိုက် ယားထိုꩻ</button>
-                    </div>
-                    <div class="input-area">
-                        <input type="text" id="messageInput" placeholder="တဲမ်းသော့ꩻ နာꩻလိတ်ဟုဲင်း...">
-                        <label for="imageUploadInput" class="image-upload-label">
-                            <span class="image-upload-icon material-icons">image</span> <input type="file" id="imageUploadInput" accept="image/*" class="hidden">
-                        </label>
-                        <button id="sendButton" disabled>ပသာ</button>
-                    </div>
-                </div>
-            </div>
-        </div>
         
-        <div id="settings-menu" class="settings-menu hidden">
-            <button id="profileButton">နမ်းအအဲဉ်ႏ</button>
-            <button id="logoutButton">ထန်ႏထိုꩻ သွုံꩻဖြာꩻ</button>
-        </div>
-
-        <div id="profile-modal" class="modal hidden">
-            <div class="modal-content">
-                <h3 id="profileModalTitle">ခွေ နမ်းအအဲဉ်ႏ</h3>
-                <div class="profile-fields">
-                    <label for="profileIdDisplay">ကေားသွုံꩻသား အုဲင်ဒီ:</label>
-                    <input type="text" id="profileIdDisplay" readonly>
-                    
-                    <label for="displayNameInput">အွဉ်ႏနယ်မဉ်ꩻ:</label>
-                    <input type="text" id="displayNameInput" placeholder="နာꩻအွဉ်ႏနယ်မဉ်ꩻ">
-                    
-                    <label for="bioInput">ဖဝ:</label>
-                    <textarea id="bioInput" placeholder="ဒေါ့ꩻနယ်သွော့ꩻ နာꩻအကျောင်ꩻခရာႏ..." maxlength="200"></textarea>
-
-                    <label for="hobbiesInput">ထာꩻဝါႏသꩻနာႏဖုံႏ:</label>
-                    <input type="text" id="hobbiesInput" placeholder="e.g., ထွားလိတ်, ခွုမ်လွူꩻဂိမ်း, လယ်ႏထာꩻ" maxlength="100">
-
-                    <label for="genderSelect">စွိုးခွီ:</label>
-                    <select id="genderSelect">
-                        <option value="">လွိုက်</option>
-                        <option value="Male">လိုꩻခို</option>
-                        <option value="Female">လိုꩻမူႏ</option>
-                        <option value="Other">အလင်ꩻ</option>
-                    </select>
-
-                    <label for="ageInput">သက်:</label>
-                    <input type="number" id="ageInput" min="1" max="120">
-
-                    <label for="bornInput">လွူးဖွာꩻလင်ꩻ:</label>
-                    <input type="date" id="bornInput">
-
-                    <label for="countryInput">ခမ်းထီ:</label>
-                    <input type="text" id="countryInput" placeholder="ခမ်းထီ" maxlength="50">
-
-                    <label for="ethnicityInput">လိုꩻမျိုꩻ:</label>
-                    <input type="text" id="ethnicityInput" placeholder="လိုꩻမျိုꩻ" maxlength="50">
-
-                    <label for="stateInput">ခမ်းနယ်ႏ:</label>
-                    <input type="text" id="stateInput" placeholder="ခမ်းနယ်ႏ" maxlength="50">
-
-                    <label for="cityInput">ဝေင်ꩻ:</label>
-                    <input type="text" id="cityInput" placeholder="ဝေင်ꩻ" maxlength="50">
-
-                    <label for="signupDateDisplay">နွို့လွဉ် မွူးနီꩻ:</label>
-                    <input type="text" id="signupDateDisplay" readonly>
-                </div>
-                
-                <p id="profile-error" class="error-message"></p>
-                <div class="profile-actions">
-                    <button id="unfriendButton" class="danger-button hidden">သွꩻတဝ်းဒွုမ်</button>
-                    <button id="saveProfileButton">သိမ်ꩻထူႏ ထာꩻပြောင်ꩻလုဲင်ႏ</button>
-                    <button id="closeProfileModal">ပေ့ꩻထိုꩻ</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="edit-message-modal" class="modal hidden">
-            <div class="modal-content">
-                <h3>မွဉ်းဖျင် ထာꩻဒေါ့ꩻ</h3>
-                <textarea id="editMessageInput"></textarea>
-                <p id="edit-error" class="error-message"></p>
-                <button id="saveEditedMessageButton">သိမ်ꩻထူႏ ထာꩻပြောင်ꩻလုဲင်ႏ</button>
-                <button id="closeEditMessageModal">မာꩻထွာဒွုမ်</button>
-            </div>
-        </div>
     </div>
 
     <script>
-        // Your Firebase config (REPLACE WITH YOUR ACTUAL CONFIG)
         const firebaseConfig = {
             apiKey: "AIzaSyCktuiXt0CYAtXWxOOOer-yl7cy23QkINc",
             authDomain: "chattt-93cc6.firebaseapp.com",
@@ -180,16 +61,10 @@
             messagingSenderId: "805645097641",
             appId: "1:805645097641:web:0c8a11315f331f6363e7b8"
         };
-
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
-
-        // Get Firebase services
         const auth = firebase.auth();
         const database = firebase.database();
         const storage = firebase.storage();
-
-        // Database references
         const usersRef = database.ref('users');
         const chatsRef = database.ref('chats');
         const publicChatRef = database.ref('public_chat');

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ဒေါ့ꩻရီ</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-storage-compat.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="chat-container">
+        <div class="header-bar">
+            <button id="backToMainButton" class="back-button">
+                <i class="material-icons">arrow_back</i>
+            </button>
+            <div id="chatPartnerDisplay" class="recipient-name">
+                ဒေါ့ꩻရီအုံကိုမ်ဝင်ꩻ
+            </div>
+            <button id="viewGroupMembersButton" class="profile-button hidden">
+                <i class="material-icons">group</i>
+            </button>
+            <button id="viewPartnerProfileButton" class="profile-button hidden">
+                <i class="material-icons">account_circle</i>
+            </button>
+        </div>
+
+        <ul id="messages" class="chat-list">
+            </ul>
+
+        <div class="message-input-layout">
+            <textarea id="messageInput" class="message-input" placeholder="တဲမ်းသော့ꩻ နာꩻလိတ်ဟုဲင်း..."></textarea>
+            <button id="sendButton" class="send-button">
+                <i class="material-icons">send</i>
+            </button>
+        </div>
+    </div>
+    
+    <div id="profile-modal" class="modal hidden">
+        <div class="modal-content">
+            <h3 id="profileModalTitle">ခွေ နမ်းအအဲဉ်ႏ</h3>
+            <div class="profile-fields">
+                <label for="profileIdDisplay">ကေားသွုံꩻသား အုဲင်ဒီ:</label>
+                <input type="text" id="profileIdDisplay" readonly>
+                <label for="displayNameInput">အွဉ်ႏနယ်မဉ်ꩻ:</label>
+                <input type="text" id="displayNameInput" placeholder="နာꩻအွဉ်ႏနယ်မဉ်ꩻ" readonly>
+                <label for="bioInput">ဖဝ:</label>
+                <textarea id="bioInput" placeholder="ဒေါ့ꩻနယ်သွော့ꩻ နာꩻအကျောင်ꩻခရာႏ..." maxlength="200" readonly></textarea>
+                <label for="hobbiesInput">ထာꩻဝါႏသꩻနာႏဖုံႏ:</label>
+                <input type="text" id="hobbiesInput" placeholder="e.g., ထွားလိတ်, ခွုမ်လွူꩻဂိမ်း, လယ်ႏထာꩻ" maxlength="100" readonly>
+                <label for="genderSelect">စွိုးခွီ:</label>
+                <select id="genderSelect" disabled>
+                    <option value="">လွိုက်</option>
+                    <option value="Male">လိုꩻခို</option>
+                    <option value="Female">လိုꩻမူႏ</option>
+                    <option value="Other">အလင်ꩻ</option>
+                </select>
+                <label for="ageInput">သက်:</label>
+                <input type="number" id="ageInput" min="1" max="120" readonly>
+                <label for="bornInput">လွူးဖွာꩻလင်ꩻ:</label>
+                <input type="date" id="bornInput" readonly>
+                <label for="countryInput">ခမ်းထီ:</label>
+                <input type="text" id="countryInput" placeholder="ခမ်းထီ" maxlength="50" readonly>
+                <label for="ethnicityInput">လိုꩻမျိုꩻ:</label>
+                <input type="text" id="ethnicityInput" placeholder="လိုꩻမျိုꩻ" maxlength="50" readonly>
+                <label for="stateInput">ခမ်းနယ်ႏ:</label>
+                <input type="text" id="stateInput" placeholder="ခမ်းနယ်ႏ" maxlength="50" readonly>
+                <label for="cityInput">ဝေင်ꩻ:</label>
+                <input type="text" id="cityInput" placeholder="ဝေင်ꩻ" maxlength="50" readonly>
+                <label for="signupDateDisplay">နွို့လွဉ် မွူးနီꩻ:</label>
+                <input type="text" id="signupDateDisplay" readonly>
+            </div>
+            
+            <p id="profile-error" class="error-message"></p>
+            <div class="profile-actions">
+                <button id="unfriendButton" class="danger-button hidden">သွꩻတဝ်းဒွုမ်</button>
+                <button id="closeProfileModal">ပေ့ꩻထိုꩻ</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="group-members-modal" class="modal hidden">
+        <div class="modal-content">
+            <h3>အစွိုꩻဗူႏ</h3>
+            <ul id="group-members-list" class="main-list">
+                </ul>
+            <div class="profile-actions">
+                <button id="closeGroupMembersModal">ပေ့ꩻထိုꩻ</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="message-actions-modal" class="modal hidden">
+        <div class="modal-content">
+            <h3 id="messageActionTitle">Message Actions</h3>
+            <textarea id="editMessageInput" class="message-input" placeholder="Edit your message..."></textarea>
+            <div class="message-actions">
+                <button id="editButton" class="action-button">မွဉ်းဖျင်</button>
+                <button id="deleteButton" class="danger-button">ယားကုဲင်</button>
+                <button id="cancelButton" class="secondary-button">မာꩻထွာတဝ်း</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCktuiXt0CYAtXWxOOOer-yl7cy23QkINc",
+            authDomain: "chattt-93cc6.firebaseapp.com",
+            databaseURL: "https://chattt-93cc6-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "chattt-93cc6",
+            storageBucket: "chattt-93cc6.firebasestorage.app",
+            messagingSenderId: "805645097641",
+            appId: "1:805645097641:web:0c8a11315f331f6363e7b8"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+        const storage = firebase.storage();
+        const usersRef = database.ref('users');
+        const chatsRef = database.ref('chats');
+        const publicChatRef = database.ref('public_chat');
+        const storageRef = storage.ref();
+    </script>
+    <script src="script.js"></script>
+
+</body>
+</html>
