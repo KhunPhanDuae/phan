@@ -134,6 +134,7 @@ body {
     display: flex;
     flex-grow: 1;
     overflow: hidden;
+    background-color: #82B9B2;
 }
 
 .main-panel, .main-panel-right {
@@ -170,27 +171,8 @@ body {
     background-color: #f0f0f0;
 }
 
-.main-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
 
-.main-list-item {
-    padding: 12px 10px;
-    border-bottom: 1px solid #eee;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    display: flex;
-    align-items: center;
-    font-size: 1em;
-    border-radius: 5px;
-    margin-bottom: 4px;
-}
 
-.main-list-item:hover {
-    background-color: #e9ecef;
-}
 
 .list-item-name {
     flex-grow: 1;
@@ -564,4 +546,61 @@ body {
 
 .message-container.sent .message {
     cursor: pointer;
+}
+
+/* --- Main Page Chat List Styling --- */
+
+/* Parent container for chat list items */
+.main-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1; /* Make the list fill available space */
+    overflow-y: auto; /* Enable scrolling for long lists */
+    background-color: #92BEB8; /* Light gray background for the list area */
+}
+
+/* Individual list item for a friend or chat */
+.main-list-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #e0e0e0;
+    cursor: pointer;
+    transition: background-color 0.2s ease; /* Smooth transition on hover */
+    background-color: #45A8FF; /* White background for each item */
+    position: relative; /* Needed for positioning the status indicator */
+}
+
+/* Hover and active states for better user experience */
+.main-list-item:hover {
+    background-color: #f1f1f1; /* Slightly darker gray on hover */
+}
+
+.main-list-item:active {
+    background-color: #e9e9e9; /* Even darker when clicked */
+}
+
+/* Styling for the friend's name */
+.main-list-item .list-item-name {
+    flex-grow: 1;
+    font-size: 0.8em;
+    font-weight: 500; /* Medium font weight */
+    color: #333;
+}
+
+/* Styling for the online/offline status indicator */
+.main-list-item .status-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #ccc; /* Default color for offline */
+    margin-left: 10px;
+    border: 2px solid black; /* White border to make it stand out */
+    box-shadow: 0 0 5px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+}
+
+/* Specific color for online status */
+.main-list-item .status-indicator.online {
+    background-color: #28a745; /* Vibrant green for online */
 }
