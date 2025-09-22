@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="blk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ပအိုဝ်းလူငယ် Software Developer များ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<style>body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+h1 {
+    color: #444;
+}
+
+#developer-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.developer-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 300px;
+    transition: transform 0.3s ease;
+}
+
+.developer-card:hover {
+    transform: translateY(-5px);
+}
+
+.developer-name {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #007bff;
+    margin-top: 0;
+}
+
+.app-name {
+    font-style: italic;
+    color: #555;
+}
+
+.description {
+    font-size: 0.9em;
+    color: #666;
+}
+
+
+</style>
+<body>
+    <header>
+        <h1>ပအိုဝ်းလူငယ် Software Developer များ</h1>
+    </header>
+
+    <main id="developer-list">
+        </main>
+
+    <script>
+const developers = [
+    {
+        name: "Khunmarana",
+        appName: "Myanmar Paoh Dictionary App",
+        description: "မြန်မာ-ပအိုဝ်း အဘိဓာန်အဖြစ် ပအိုဝ်းစာပေကို လေ့လာသူတွေအတွက် ရည်ရွယ်ပြီး ဖန်တီးထားတာပါ။"
+    },
+    {
+        name: "Khon Soe Zaw Thu / ခွန်အား",
+        appName: "Pa'O Calendar App",
+        description: "ရိုးရာပအိုဝ်းပြက္ခဒိန်ကို အခြေခံပြီး ရက်ထူးရက်မြတ်တွေကို ဖော်ပြပေးတဲ့ App ဖြစ်ပါတယ်။"
+    },
+    {
+        name: "ခွန်စိုးလွင်, နောင်ဟွိုꩻ",
+        appName: "Paoh Song App",
+        description: "ပအိုဝ်းသီချင်းတွေကို စုစည်းထားတဲ့ App ဖြစ်ပြီး ပအိုဝ်းဂီတကို ချစ်မြတ်နိုးသူတွေအတွက် ရည်ရွယ်ပါတယ်။"
+    },
+    {
+        name: "Khun Aung, Software Engineer",
+        appName: "မြန်မာပက္ခဒိန် App",
+        description: "မြန်မာပြက္ခဒိန်ကို အသုံးပြုရလွယ်ကူအောင် ဖန်တီးထားတဲ့ App ဖြစ်ပါတယ်။"
+    },
+    {
+        name: "TeeReeRee",
+        appName: "ပအိုဝ်ႏလိတ်မွူးစောင်ႏ App",
+        description: "ပအိုဝ်းစာပေ လေ့လာဖို့အတွက် ရည်ရွယ်ထားတဲ့ စာအုပ်စာတမ်းတွေကို စုစည်းပေးထားတာပါ။"
+    },
+    {
+        name: "ခွန်ထက်နိုင်",
+        appName: "zFont App",
+        description: "Android ဖုန်းတွေမှာ Font အမျိုးမျိုးကို အလွယ်တကူ ထည့်သွင်းနိုင်ဖို့ ဖန်တီးထားတဲ့ App ဖြစ်ပါတယ်။"
+    },
+    {
+        name: "ခွန်ဖန်ဒွဲ့",
+        appName: "ဒေါ့ꩻရီ App",
+        description: "ဗဟိုစမ်းသမ် ဒါမှမဟုတ် ဒေသန္တရအကြောင်းအရာတွေကို ပြောပြတဲ့ App ဖြစ်နိုင်ပါတယ်။"
+    },
+    {
+        name: "ခွန်အောင်ႏထို",
+        appName: "ပအိုဝ်းစကားပြော App",
+        description: "ပအိုဝ်းဘာသာစကားကို စိတ်ဝင်စားသူတွေအတွက် သင်ခန်းစာတွေ ထည့်သွင်းထားတဲ့ App ဖြစ်ပါတယ်။"
+    },
+    {
+        name: "Successimprove Company / Pa'O Digital Hub",
+        appName: "နယ်ꩻခြွိုင်းခြိုꩻ App",
+        description: "Software Developer တွေအတွက် အထောက်အကူပြု ကိရိယာတွေ စုစည်းပေးထားတဲ့ App ဖြစ်ပါတယ်။"
+    }
+];
+
+const developerList = document.getElementById('developer-list');
+
+developers.forEach(developer => {
+    const card = document.createElement('div');
+    card.classList.add('developer-card');
+
+    card.innerHTML = `
+        <h2 class="developer-name">${developer.name}</h2>
+        <h3 class="app-name">App: ${developer.appName}</h3>
+        <p class="description">${developer.description}</p>
+    `;
+
+    developerList.appendChild(card);
+});
+
+</script>
+</body>
+</html>
